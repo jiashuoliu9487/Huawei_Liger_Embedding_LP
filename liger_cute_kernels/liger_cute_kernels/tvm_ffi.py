@@ -186,7 +186,7 @@ def moe_fused_fwd_bf16(
     Y = torch.empty((num_tokens, hidden_dim), dtype=torch.bfloat16, device=X.device)
     token_expert_slots = torch.empty((max_total_slots,), dtype=torch.int32, device=X.device)
     tile_expert_ids = torch.empty((max_m_tiles,), dtype=torch.int32, device=X.device)
-    symm_meta = torch.empty(17, dtype=torch.int64, device="cpu")
+    symm_meta = torch.empty(13, dtype=torch.int64, device="cpu")
     _load_module().moe_fused_fwd_bf16(
         X,
         expert_indices,
@@ -202,7 +202,7 @@ def moe_fused_fwd_bf16(
         tile_expert_ids,
         symm_meta,
     )
-    chosen_tile_m = int(symm_meta[16].item())
+    chosen_tile_m = int(symm_meta[12].item())
     return Y, symm_meta, symm_meta, symm_meta, token_expert_slots, tile_expert_ids, chosen_tile_m
 
 
@@ -249,101 +249,3 @@ def moe_fused_bwd_bf16(
         dW,
     )
     return dX, dB, dC, dA, dW
-
-
-def fused_linear_scaled_cross_entropy_configure_forward(
-    max_tokens: int,
-    max_local_vocab: int,
-) -> None:
-    _load_module().fused_linear_scaled_cross_entropy_configure_forward(
-        int(max_tokens),
-        int(max_local_vocab),
-    )
-
-
-def fused_linear_scaled_cross_entropy_configure_backward(
-    max_tokens: int,
-    max_hidden: int,
-    max_local_vocab: int,
-    max_tiles_per_reduce: int,
-    team_handle: int,
-) -> None:
-    _load_module().fused_linear_scaled_cross_entropy_configure_backward(
-        int(max_tokens),
-        int(max_hidden),
-        int(max_local_vocab),
-        int(max_tiles_per_reduce),
-        int(team_handle),
-    )
-
-
-def fused_linear_scaled_cross_entropy_forward(
-    x: torch.Tensor,
-    weight: torch.Tensor,
-    target: torch.Tensor,
-    vocab_start: int,
-    ignore_index: int,
-    inverse_temperature: float,
-    team_handle: int,
-    return_entropy: bool,
-):
-    """Run the complete tensor-parallel forward on a prepared NVSHMEM team."""
-    tokens = x.shape[0]
-    nll = torch.empty(tokens, dtype=torch.float32, device=x.device)
-    lse = torch.empty(tokens, dtype=torch.float32, device=x.device)
-    entropy = (
-        torch.empty(tokens, dtype=torch.float32, device=x.device)
-        if return_entropy
-        else torch.zeros(tokens, dtype=torch.float32, device=x.device)
-    )
-    _load_module().fused_linear_scaled_cross_entropy_forward(
-        x,
-        weight,
-        target,
-        int(vocab_start),
-        int(ignore_index),
-        float(inverse_temperature),
-        int(team_handle),
-        bool(return_entropy),
-        nll,
-        lse,
-        entropy,
-    )
-    return nll, lse, entropy
-
-
-def fused_linear_scaled_cross_entropy_backward(
-    grad_output: torch.Tensor,
-    entropy_grad: torch.Tensor,
-    x: torch.Tensor,
-    weight: torch.Tensor,
-    target: torch.Tensor,
-    lse: torch.Tensor,
-    entropy: torch.Tensor,
-    vocab_start: int,
-    ignore_index: int,
-    inverse_temperature: float,
-    team_handle: int,
-    tiles_per_reduce: int,
-    return_entropy: bool,
-):
-    grad_input = torch.empty_like(x)
-    grad_weight = torch.empty_like(weight)
-    _load_module().fused_linear_scaled_cross_entropy_backward(
-        grad_output,
-        entropy_grad,
-        x,
-        weight,
-        target,
-        lse,
-        entropy,
-        int(vocab_start),
-        int(ignore_index),
-        float(inverse_temperature),
-        int(team_handle),
-        int(tiles_per_reduce),
-        bool(return_entropy),
-        grad_input,
-        grad_weight,
-    )
-    return grad_input, grad_weight

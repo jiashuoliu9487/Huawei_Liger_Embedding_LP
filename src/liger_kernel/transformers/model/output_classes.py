@@ -44,13 +44,6 @@ except Exception:
     _LlavaCausalLMOutputWithPast = None
 
 try:
-    from transformers.models.muse_glimmer.modeling_muse_glimmer import (
-        MuseGlimmerCausalLMOutputWithPast as _MuseGlimmerCausalLMOutputWithPast,
-    )
-except Exception:
-    _MuseGlimmerCausalLMOutputWithPast = None
-
-try:
     from transformers.models.paligemma.modeling_paligemma import (
         PaliGemmaCausalLMOutputWithPast as _PaliGemmaCausalLMOutputWithPast,
     )
@@ -148,14 +141,6 @@ if _InternVLCausalLMOutputWithPast is not None:
 
     @dataclass
     class LigerInternVLCausalLMOutputWithPast(_InternVLCausalLMOutputWithPast):
-        token_accuracy: Optional[torch.FloatTensor] = None
-        predicted_tokens: Optional[torch.LongTensor] = None
-
-
-if _MuseGlimmerCausalLMOutputWithPast is not None:
-
-    @dataclass
-    class LigerMuseGlimmerCausalLMOutputWithPast(_MuseGlimmerCausalLMOutputWithPast):
         token_accuracy: Optional[torch.FloatTensor] = None
         predicted_tokens: Optional[torch.LongTensor] = None
 

@@ -2,8 +2,7 @@ from typing import Optional
 
 import torch
 
-from liger_kernel.backends import dispatch
-from liger_kernel.ops import LigerCrossEntropyFunction  # noqa: F401 — re-exported for backend-routing checks
+from liger_kernel.ops import LigerCrossEntropyFunction
 from liger_kernel.transformers.functional import CrossEntropyOutput
 
 
@@ -41,8 +40,7 @@ class LigerCrossEntropyLoss(torch.nn.Module):
         self.return_predicted_tokens = return_predicted_tokens
 
     def forward(self, _input: torch.Tensor, target: torch.Tensor):
-        loss, z_loss, token_accuracy, predicted_tokens = dispatch(
-            "cross_entropy",
+        loss, z_loss, token_accuracy, predicted_tokens = LigerCrossEntropyFunction.apply(
             _input,
             target,
             self.weight,

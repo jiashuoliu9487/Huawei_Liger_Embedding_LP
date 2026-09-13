@@ -26,20 +26,16 @@ def get_default_dependencies():
             "torch>=2.6.0",
         ]
     elif platform == "npu":
-        return ["torch==2.9.0", "torch_npu==2.9.0", "triton-ascend==3.2.2"]
+        return ["torch==2.7.1", "torch_npu==2.7.1", "triton-ascend==3.2.1"]
 
 
 def get_optional_dependencies():
     """Get optional dependency groups."""
-    # cuTile kernels use CompilerOptions.num_worker_warps (replace_hints / @ct.kernel),
-    # which only exists in cuda-tile >= 1.4.0. Pin the floor to 1.5.0 (validated) so the
-    # resolver can't backtrack to an older cuda-tile whose CompilerOptions lacks that
-    # field (which raises "unexpected keyword argument 'num_worker_warps'" at import).
     cutile_deps = [
-        "cuda-tile>=1.5.0",
+        "cuda-tile",
     ]
     cutile_tileiras_deps = [
-        "cuda-tile[tileiras]>=1.5.0",
+        "cuda-tile[tileiras]",
     ]
     cutedsl_deps = [
         "nvidia-cutlass-dsl>=4.6.0",
