@@ -1,0 +1,98 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Liger Embedding 社区任务审核报告</title><style>body{font:15px/1.8 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;color:#182638;background:#eef2f6;margin:0}main{max-width:1100px;margin:32px auto;background:white;padding:50px 56px;box-shadow:0 4px 24px #16324f10}h1{font-size:34px;line-height:1.4;color:#113858}h2{font-size:23px;border-bottom:2px solid #244c69;padding-bottom:8px;margin-top:38px}h3{font-size:18px;margin-top:27px}p{margin:12px 0}.eyebrow{letter-spacing:2px;color:#5c7183;font-size:12px}.verdict{background:#fff2ee;border-left:5px solid #ae352a;padding:20px 24px;margin-top:30px}.verdict>strong{font-size:21px;color:#9d2924}table{border-collapse:collapse;width:100%;font-size:13px;margin:20px 0}th,td{border:1px solid #d8e0e8;padding:10px 12px;text-align:left;vertical-align:top}th{background:#eaf0f5;color:#163c58}tr:nth-child(even){background:#f8fafc}.fail{color:#af3028;font-weight:bold;min-width:85px}.partial{color:#8a5b12;font-weight:bold;min-width:85px}code{font:12.5px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere;background:#f0f3f6;padding:1px 4px}pre{background:#f1f5f8;border:1px solid #dce4eb;padding:17px;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace}li{margin:8px 0}.numbers td{font-variant-numeric:tabular-nums}a{color:#145d94}footer{border-top:1px solid #cad6df;margin-top:35px;padding-top:16px;color:#657585;font-size:12px}@media print{body{background:white}main{margin:0;max-width:none;padding:0;box-shadow:none}h2,h3{break-after:avoid}tr,pre,.verdict{break-inside:avoid}a{color:inherit}thead{display:table-header-group}@page{size:A4;margin:16mm}}</style></head><body><main>
+<header><p class="eyebrow">社区任务技术审核 · ISSUE #1801</p><h1>Liger Embedding 性能优化<br>工程验收审核报告</h1><p>审核日期：2026 年 10 月 7 日（北京时间）</p><p>对象：<code>/root/Huawei_Liger_Embedding_LP</code><br>分支：<code>dev-0.8.2</code><br>提交：<code>72036ce0efe8f5cd3c048fe55447bc0caf8ba36e</code>（任务总结1提交）</p></header>
+<div class="verdict"><strong>审核结论：不通过，需整改后重新申请验收。</strong><p>阻塞项不止报告提及的 0.42% 性能回退。当前工程存在 Forward 基准转调原生实现、标准测试与 Benchmark 无法复现、Ascend 原始性能证据缺失，以及输入布局兼容性回归。现有材料不足以支持“除一个配置外均已达标”的验收结论。</p></div>
+
+<h2>1. 审核依据、范围与证据口径</h2>
+<p>以 <a href="https://github.com/triton-lang/triton-ascend/issues/1801">社区任务 #1801</a> 在审核时展示的“核心开发要求及验收标准”、测试标准及任务标准为依据。远程工程通过用户指定的 <a href="https://hidevlab.huawei.com/web-ide-console?devEnvId=2102019326628929536">华为 HiDevLab 环境</a>查阅。</p>
+<p>已在开展代码审核前完整读取以下五份指定文档：</p>
+<ol><li><code>/workspace/shared_assets/README.md</code>：公共资源目录只读，审核未修改该目录。</li><li><code>/root/Huawei_Liger_Embedding_LP/FINAL_OPTIMIZATION_REPORT.md</code></li><li><code>/root/Huawei_Liger_Embedding_LP/OPTIMIZATION_STRATEGY_REPORT.md</code></li><li><code>/root/Huawei_Liger_Embedding_LP/PERFORMANCE_BENCHMARK_REPORT.md</code></li><li><code>/root/Huawei_Liger_Embedding_LP/PROFILING_ANALYSIS_REPORT.md</code></li></ol>
+<p>进一步检查了工程约定、Ascend kernel、模块封装、后端注册、pytest 文件、Benchmark 脚本与辅助函数、Git 差异及 CSV。独立执行了环境检查、现有 pytest、Benchmark 启动、原生调用计数探针及非连续输入探针。没有修改算子代码、测试断言、容差、依赖环境或原始 CSV；审查前后 <code>git status --short</code> 均无输出。远程临时审计材料保存在 <code>/tmp/embedding_audit_*</code>。</p>
+<p><strong>证据等级：</strong>“实测”指本轮执行所得；“静态核查”指当前提交的源码；“报告自述”指历史报告，不能自动视为已复现。未完成全量性能重测：当前标准命令已在运行前置阶段失败，且已有路径污染问题。此报告不宣称已经证明所有 dtype 或所有设备数值失败，也不推断历史数据造假。</p>
+
+<h2>2. 逐项验收矩阵</h2>
+<table><thead><tr><th>社区要求</th><th>审核结果</th><th>主要证据及判断</th></tr></thead><tbody>
+<tr><td>Liger 0.8.2、Triton-Ascend 3.2.2；测试环境 torch_npu 2.9.0、CANN 9.1.0</td><td class="fail">不满足</td><td>源码声明 0.8.2，实际 Triton-Ascend 3.2.2；实际 torch 2.7.1、torch-npu 2.7.1.post8。容器启动说明标注 CANN 9.1.0。未安装可默认导入的 liger_kernel，缺少 transformers。</td></tr>
+<tr><td>前向、反向功能与参考实现一致</td><td class="partial">部分实现，未验收</td><td>有前向 gather 与反向 atomic_add；当前 pytest 加载失败，缺少可复现的全量正确性结果；布局问题已实测。</td></tr>
+<tr><td>FP16 / BF16 / FP32 精度满足容差</td><td class="partial">证据不足</td><td>现有 pytest 仅参数化 FP32；没有本轮可复现的 FP16/BF16 数值与梯度检查。BF16 性能表不能代替精度测试。</td></tr>
+<tr><td>padding_idx 输出和梯度为零</td><td class="partial">部分证据</td><td>封装初始化清零并在前向 clone 后按索引置零；测试包含正 padding_idx，但现有单测未成功执行。本轮未独立验收负索引等边界。</td></tr>
+<tr><td>任意 input_ids 形状，shape / 布局 / dtype 与上游一致</td><td class="fail">不满足布局兼容性</td><td>Ascend 前向直接 view(-1)；转置形成的合法非连续二维索引实测报 RuntimeError。现有单测仅传入长度 320 的一维索引，之后才 reshape 输出。</td></tr>
+<tr><td>Triton-Ascend kernel 与 NPU 适配优化</td><td class="partial">部分满足</td><td>存在 UB 预算、Tile、Mouter/2D、grid 限制与 atomic_add；但标准 Forward 模式走原生实现，无法用当前基准证明这些优化的性能效果。</td></tr>
+<tr><td>pytest 全量 0 failed、0 error，不能改断言与容差</td><td class="fail">本轮未通过</td><td>现有路径 test/transformers/test_embedding.py 在 conftest 加载时缺 transformers。相对初始化提交 c5983e6，测试只去掉 skip，未见断言或容差修改；不是“削弱容差”问题。</td></tr>
+<tr><td>Benchmark 三种模式全部配置正常输出，无崩溃、无超时</td><td class="fail">本轮未通过</td><td>使用 PYTHONPATH=src 后，标准脚本因 infer_device() 返回 cpu，在 torch.cpu.empty_cache 处报 AttributeError；未进入完整采样。</td></tr>
+<tr><td>所有配置 Liger / Torch 耗时比 ≤ 1</td><td class="fail">不满足 / 证据无效</td><td>报告自述 Forward 8192 ratio=1.004202；更严重的是 Forward 实际转调原生 PyTorch，不能证明 Liger kernel 达标。</td></tr>
+<tr><td>优化前后逐配置数据表和原始证据</td><td class="fail">不满足</td><td>最终 RAW 文件未找到；当前 CSV 的 embedding 记录全为 2024 年 A100。旧报告 D=2048 与最终报告 D=4096 的不同矩阵不能拼接为同配置优化前后对比。</td></tr>
+<tr><td>910B3 性能数据及 A2 / A3 / 950 覆盖，限制须在 PR 说明</td><td class="partial">未证实</td><td>本轮设备字符串 Ascend910_9382；npu-smi 标识 Ascend910，无法据此确认 910B3。历史 B1/B2 说法冲突；未见三平台日志或 PR 中限制说明。</td></tr>
+<tr><td>Profiling 根因、优化手段、复测命令和结果；验收后提交指定仓 PR</td><td class="partial">材料不完整</td><td>有策略及分析文字，但 profiling 目录缺失、旧分析与最终参数不一致。未提供可核验的目标仓 PR；PR 是验收后流程，不将“验收前未提交”单独作为技术否决理由。</td></tr>
+</tbody></table>
+
+<h2>3. 必须整改的问题</h2>
+<h3>P1-01 · Forward 基准没有测到待验收的 Triton 实现</h3>
+<p><code>benchmark/scripts/benchmark_embedding.py:50</code> 为 Liger 模块设置 <code>_benchmark_kernel_operation_mode</code>。<code>src/liger_kernel/transformers/experimental/embedding.py:22–25</code> 在 NPU 且为 forward 模式或关闭梯度时调用 <code>torch.nn.functional.embedding</code>。基准辅助代码 <code>benchmark/scripts/utils.py:162–163</code> 还使用 <code>torch.no_grad()</code>，因此仅删除模式标记仍不足以恢复自研 Forward 测量。</p>
+<pre>if self.weight.device.type == "npu" and (
+    not torch.is_grad_enabled()
+    or getattr(self, "_benchmark_kernel_operation_mode", None) == "forward"
+):
+    embedded = torch.nn.functional.embedding(indices, self.weight)
+else:
+    embedded = LigerEmbeddingFunction.apply(self.weight, indices)</pre>
+<p>在 NPU 上以临时进程加载当前封装源码并对 functional.embedding 计数，实测：<code>forward flag native calls 1</code>、<code>no_grad native calls 1</code>。探针通过 runpy 直接加载封装文件，未替换其实现；不是完整安装后的 pytest 通过证明。</p>
+<p><strong>影响：</strong>现有 Forward Torch/Liger 接近的结果可能是原生实现之间的比较，不能归因为 Tile、M5 或 core multiplier 优化。与 FINAL 报告“Forward 不再回退原生 embedding”的声明直接冲突。整改必须恢复正常推理及标准基准走待验收 kernel，并通过实际 kernel 名或调用链证据确认。</p>
+
+<h3>P1-02 · 当前环境无法复现全量测试与 Benchmark</h3>
+<p>本轮实测版本为 <code>torch=2.7.1</code>、<code>torch-npu=2.7.1.post8</code>、<code>triton-ascend=3.2.2</code>，未满足任务指定 torch_npu 2.9.0。源码 pyproject.toml 声明 0.8.2 不等同于包已正确安装。</p>
+<pre>pytest -q test/transformers/test_embedding.py
+→ ImportError while loading conftest
+→ ModuleNotFoundError: No module named 'transformers'
+
+PYTHONPATH=src python benchmark/scripts/benchmark_embedding.py
+→ AttributeError: module 'torch.cpu' has no attribute 'empty_cache'</pre>
+<p>已定位因果链：<code>src/liger_kernel/utils.py:60–67</code> 依赖 transformers.utils 检测 NPU，导入异常后返回 False；因此即使先导入 torch_npu，<code>infer_device()</code> 仍返回 cpu，自动导入通用 embedding。强制 <code>LIGER_KERNEL_IMPL=ascend</code> 又因当前设备被识别为 cpu 报错。直接创建 NPU tensor 的探针可以运行，不能把问题误判为“服务器没有 NPU”。</p>
+<p><strong>整改：</strong>按任务版本准备并记录完整环境、安装工程依赖，验证 infer_device()==npu、函数模块为 Ascend 实现，然后以不修改断言和容差的测试文件重跑。测试目录与 Issue 中 <code>tests/test_embedding.py</code> 不同，应提交路径映射及上游版本依据。</p>
+
+<h3>P1-03 · 当前性能证据无法支撑验收</h3>
+<p>当前 <code>benchmark/data/all_benchmark_data.csv</code> 经 csv.DictReader 检查，有 <strong>144 条 embedding 记录</strong>，全部标为 <strong>NVIDIA A100-SXM4-80GB / 2024-09-03</strong>；对应 liger、huggingface、torch_compile 的 forward speed、full speed、full memory，各组合 16 条，未见 Ascend embedding 或 backward 数据。这与性能报告所称 2026-10-05 Ascend CSV 不一致。</p>
+<p>项目文件检索未找到报告引用的 <code>BENCH_M5_RAW.txt</code>、<code>FINAL_BENCHMARK_RAW.txt</code>、其他 FINAL_*_RAW、<code>PYTORCH_COMPARISON_REPORT.md</code>、<code>ENVIRONMENT_REPORT.md</code>、<code>PROFILING_BASELINE_COMPARISON_REPORT.md</code>；明确检查 <code>profiling/</code>、BENCH_M5_RAW.txt、FINAL_BENCHMARK_RAW.txt 返回不存在。结论限定为“当前提供的工程中未找到”，不排除这些材料保存在其他历史环境。</p>
+<p><strong>整改：</strong>为同一提交、同一设备、同一环境、同一配置矩阵重新生成优化前后原始结果、比值表和命令日志。每行至少包含 mode、shape、D、V、dtype、padding、provider、P50、单位、硬件、提交和时间。必须保留不达标行，不得以均值加速或其他模式收益抵消单配置回退。</p>
+
+<h3>P1-04 · 非连续索引输入发生布局兼容性回归</h3>
+<p><code>src/liger_kernel/ops/backends/_ascend/ops/embedding.py:354–356</code> 在前向去掉连续化后直接执行 <code>indices.view(-1)</code>。本轮使用合法索引 <code>torch.arange(6, device='npu').reshape(2,3).t()</code>，权重为 8×4，直接调用该 Ascend 前向函数，实测：</p>
+<pre>RuntimeError: view size is not compatible with input tensor's size and stride
+(at least one dimension spans across two contiguous subspaces).
+Use .reshape(...) instead.</pre>
+<p><strong>影响：</strong>转置二维索引无法进入计算；不能以只覆盖连续一维输入的 11 个历史用例证明 shape / 布局泛化已完成。该发现是布局问题，不表示所有二维输入都失败。整改后需覆盖非连续索引、连续多维、标量、空输入、INT/LONG，并验证输出 shape 与参考一致；非连续 weight 的处理也应核查。</p>
+
+<h3>P2-05 · 精度覆盖、Profiling 与交付材料不足</h3>
+<p>测试 <code>test/transformers/test_embedding.py:34</code> 仅配置 FP32（atol=1e-6、rtol=1e-5）；第 46/49 行生成一维 320 个 token。第 54/61 行分别检查前向和权重梯度，已有基本正确性测试，但缺 FP16/BF16、宽 hidden size 与布局泛化的验收证据。相对初始化提交 c5983e6，测试只移除了 skip，未改断言与容差；不能把覆盖不足描述成故意放宽精度。</p>
+<p>Profiling 报告实际描述 D=2048、BT=4096、M6 的旧版本，仅有两条主机/设备时间记录，并明确承认缺基线 profile 和 PMU 指标。不能据此确认最终 D=4096、BT=8192、M5 配置的带宽、指令或调度根因。FINAL 报告还称 Backward 宽 hidden 使用 core multiplier 8，而当前第 413 行实际按 token 区间选择 1 或 2。策略报告“10 组通过”与最终报告“11/12”也应统一。</p>
+<p>整改需补 FP16/BF16 数值与梯度、重复索引、padding 边界测试，保留原有断言与容差；采集同配置 baseline / candidate 的原始 profile，解释 kernel 次数、host/device 时间、非融合路径和具体优化收益。涉及带宽、UB/register 压力或指令瓶颈的结论，应补相应计数器证据，或明确标为假设。A2/A3/950 的验证与硬件限制说明仍需补齐。</p>
+
+<h2>4. 对报告中 12 个性能配置的独立重算</h2>
+<p>以下只重算 FINAL 报告给出的数字，单位 ms，ratio = Liger / Torch；<strong>不是本轮性能实测，也不等同于验收通过</strong>。尤其 Forward 存在原生分支，所有行均缺对应原始日志、运行提交与硬件绑定。</p>
+<table class="numbers"><thead><tr><th>模式</th><th>BT</th><th>Torch</th><th>报告 Liger</th><th>ratio</th><th>仅数字判断</th></tr></thead><tbody><tr><td>Forward</td><td>1024</td><td>0.08478</td><td>0.08466</td><td>0.998585</td><td>数值未超基线</td></tr><tr><td>Forward</td><td>2048</td><td>0.04418</td><td>0.04368</td><td>0.988683</td><td>数值未超基线</td></tr><tr><td>Forward</td><td>4096</td><td>0.08402</td><td>0.08380</td><td>0.997382</td><td>数值未超基线</td></tr><tr><td>Forward</td><td>8192</td><td>0.16184</td><td>0.16252</td><td>1.004202</td><td>数值超基线</td></tr><tr><td>Backward</td><td>1024</td><td>4.41076</td><td>3.66802</td><td>0.831607</td><td>数值未超基线</td></tr><tr><td>Backward</td><td>2048</td><td>4.43923</td><td>3.71208</td><td>0.836199</td><td>数值未超基线</td></tr><tr><td>Backward</td><td>4096</td><td>4.48648</td><td>3.80261</td><td>0.847571</td><td>数值未超基线</td></tr><tr><td>Backward</td><td>8192</td><td>4.58607</td><td>3.98929</td><td>0.869871</td><td>数值未超基线</td></tr><tr><td>Full</td><td>1024</td><td>4.85318</td><td>4.12423</td><td>0.849800</td><td>数值未超基线</td></tr><tr><td>Full</td><td>2048</td><td>5.31206</td><td>4.61089</td><td>0.868004</td><td>数值未超基线</td></tr><tr><td>Full</td><td>4096</td><td>6.23862</td><td>5.56406</td><td>0.891874</td><td>数值未超基线</td></tr><tr><td>Full</td><td>8192</td><td>8.06792</td><td>7.47830</td><td>0.926918</td><td>数值未超基线</td></tr></tbody></table>
+<p>Forward BT=8192 的差值为 0.00068 ms，约 0.420168%。任务未规定可忽略的噪声豁免，不能将 ratio&gt;1 判为通过。重复独立测量和置信区间可用来解释抖动，但不能代替严格门槛或掩盖执行路径问题。</p>
+<p>PERFORMANCE 报告的旧矩阵为 D=2048、V=102400、BF16、五个 token 长度 1024–16384；FINAL 矩阵只有四个 token 长度并指向 D=4096。两者缺少同配置、同提交的关联，不能当作完整优化前后逐行对照。</p>
+
+<h2>5. 本轮独立复核记录</h2>
+<table><thead><tr><th>检查</th><th>观察结果</th><th>证据性质</th></tr></thead><tbody>
+<tr><td>git log / status</td><td>HEAD 72036ce0…；dev-0.8.2；审查前后 clean</td><td>实测</td></tr>
+<tr><td>包和设备信息</td><td>Torch 2.7.1、torch-npu 2.7.1.post8、Triton-Ascend 3.2.2；设备 Ascend910_9382，npu-smi 为 Ascend910</td><td>实测；不自行映射为 910B3</td></tr>
+<tr><td>现有 pytest</td><td>conftest 加载失败，缺 transformers；未取得 0 failed / 0 error</td><td>实测</td></tr>
+<tr><td>标准 Benchmark 启动</td><td>加 PYTHONPATH=src 以定位工程；120 秒外层超时保护内提前报 torch.cpu.empty_cache 异常，未形成新性能数据</td><td>实测；非超时失败</td></tr>
+<tr><td>原生分支计数</td><td>forward 标记、no_grad 分别调用一次 functional.embedding</td><td>临时进程探针；直接加载封装源码</td></tr>
+<tr><td>非连续 input_ids</td><td>直接导入 Ascend 函数成功；转置输入触发 view RuntimeError</td><td>实测；未运行完整精度矩阵</td></tr>
+<tr><td>CSV 统计</td><td>144 条 embedding 均为历史 A100 数据，0 条 Ascend embedding</td><td>实测文件解析</td></tr>
+<tr><td>测试差异</td><td>相对 c5983e6 只移除 skip；断言和容差未改</td><td>本地 Git 历史；未等同于远端上游标签逐字校验</td></tr>
+</tbody></table>
+<p>复核临时脚本及日志位于远程 <code>/tmp/embedding_audit_probe.py</code>、<code>/tmp/embedding_audit_probe.txt</code>、<code>/tmp/embedding_audit_runtime.txt</code>、<code>/tmp/embedding_audit_details.txt</code>、<code>/tmp/embedding_audit_finalchecks.txt</code>。这些是审计临时文件，不是修改后的工程交付代码。</p>
+
+<h2>6. 重新申请验收的最小材料清单</h2>
+<ol>
+<li><strong>恢复可复现环境。</strong>提供 task 指定版本的安装记录、设备型号和同一提交 ID；确认自动后端检测为 npu，函数绑定到 Ascend 后端。</li>
+<li><strong>修复执行路径与布局回归。</strong>Forward 基准及正常 no_grad 推理都运行待验收 kernel；用 profiler 核验。恢复合法非连续索引支持并补边界覆盖。</li>
+<li><strong>通过完整功能矩阵。</strong>保留社区/上游断言与容差，补 FP16/BF16/FP32、前后向、重复索引、padding、shape/layout；记录 0 failed、0 error 及收集到的用例数。</li>
+<li><strong>重建性能证据。</strong>在确认的 910B3 环境运行全部标准配置及三个 mode，提供优化前后逐行数据、原始 CSV/log、命令、提交和实际执行 kernel；每行 ratio≤1。性能测试矩阵需与指定上游脚本建立可审核对应关系。</li>
+<li><strong>完成平台与 Profiling 材料。</strong>提供 A2/A3/950 结果；硬件差异限制按 Issue 要求在 PR 中说明。Profiling 必须对应最终提交及失败/代表性配置，原始附件可访问。</li>
+<li><strong>统一报告并走合入流程。</strong>修正原生回退、core multiplier、通过数量、设备与数据路径等矛盾。技术验收通过后，向任务指定 <a href="https://gitcode.com/Ascend/triton-ascend-kernels/tree/experimental">Triton-Ascend-Kernels experimental</a> 分支提交 PR，并提供链接与复测附件。</li>
+</ol>
+<footer>审核结论针对 2026-10-07 可访问的上述提交与远程会话。环境缺失、源码缺陷、历史材料不可追溯分别判定；任何后续修复或重新提交均需重新核验。</footer>
+</main></body></html>
