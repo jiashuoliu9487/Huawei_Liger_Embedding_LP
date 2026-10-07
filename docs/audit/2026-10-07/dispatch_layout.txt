@@ -1,0 +1,6 @@
+BACKEND liger_kernel.ops.backends._ascend.ops.embedding
+FORWARD_FLAG_NATIVE_CALLS 1
+NO_GRAD_NATIVE_CALLS 1
+REFERENCE_SHAPE (3, 2, 4)
+NONCONTIG RuntimeError view size is not compatible with input tensor's size and stride (at least one dimension spans across two contiguous subspaces). Use .reshape(...) instead.
+[ERROR] 2026-10-07-09:38:03 (PID:134273, Device:0, RankID:-1) ERR01001 OPS invalid parameter

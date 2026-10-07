@@ -1,0 +1,49 @@
+a541958d36fee81a6fc6319e55ef020682432f00 docs: add Liger Embedding community task audit report
+{'torch': '2.7.1', 'torch-npu': '2.7.1', 'triton-ascend': '3.2.1', 'liger-kernel': '0.8.2', 'transformers': '5.19.0'}
+DEVICE npu Ascend910_9382
+BACKEND liger_kernel.ops.backends._ascend.ops.embedding
+/usr/local/python3.11.15/lib/python3.11/site-packages/pytest_asyncio/plugin.py:247: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-None0] PASSED [  9%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-None1] PASSED [ 18%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-128-None] PASSED [ 27%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-60-None0] PASSED [ 36%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-60-None1] PASSED [ 45%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-120-None] PASSED [ 54%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-500-None] PASSED [ 63%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-30522-768-None] PASSED [ 72%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-0] PASSED [ 81%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-128-50] PASSED [ 90%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-30522-768-1] PASSED [100%]
+
+=============================== warnings summary ===============================
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-None0]
+  /root/Huawei_Liger_Embedding_LP/test/transformers/test_embedding.py:56: UserWarning: Cannot create tensor with interal format while allow_internel_format=False, tensor will be created with base format. (Triggered internally at build/CMakeFiles/torch_npu.dir/compiler_depend.ts:335.)
+    grad_output = torch.randn_like(torch_output)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 11 passed, 1 warning in 33.98s ========================
+PYTEST_EXIT=0
+usage: benchmark_embedding.py [-h] [--overwrite]
+                              [--sweep-mode {token_length,model_config}]
+                              [--model MODEL] [--bt BT]
+
+Benchmarking script for Liger-Kernel
+
+options:
+  -h, --help            show this help message and exit
+  --overwrite           Flag to overwrite existing benchmark data with current
+                        run.
+  --sweep-mode {token_length,model_config}
+                        Benchmark sweep dimension. 'token_length': sweep
+                        sequence length with fixed model. 'model_config':
+                        sweep model configs with fixed token length.
+  --model MODEL         Model config name from MODEL_REGISTRY (e.g.
+                        llama_2_7b, llama_3_8b). Defaults to llama_3_8b when
+                        not specified.
+  --bt BT               Target total tokens (batch_size * seq_len) for model-
+                        config sweep. Only used when --sweep-
+                        mode=model_config.
