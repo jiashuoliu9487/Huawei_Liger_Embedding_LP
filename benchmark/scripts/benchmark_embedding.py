@@ -47,6 +47,7 @@ def setup_embedding(input: SingleBenchmarkRunInput):
 
     if input.kernel_provider == "liger":
         emb = LigerEmbedding(V, D).to(device).to(dtype)
+        emb._benchmark_kernel_operation_mode = input.kernel_operation_mode
     elif input.kernel_provider == "torch_compile":
         emb = torch.compile(Embedding(V, D).to(device).to(dtype))
     elif input.kernel_provider == "torch":

@@ -252,9 +252,8 @@ def _select_forward_tile_sizes(
     if embedding_dim >= _WIDE_EMBEDDING_THRESHOLD:
         block_n = _largest_wide_forward_block_n(embedding_dim, dtype_size)
         max_m = _clamp_forward_block_m(128, block_n, dtype_size)
-        block_m = min(6, max_m)
+        block_m = min(5, max_m)
         return max(1, block_m), block_n
-
     best_key = None
     best_m = 64
     best_n = triton.next_power_of_2(min(128, embedding_dim))
@@ -296,18 +295,18 @@ def _pick_forward_schedule(
     grid_n = triton.cdiv(embedding_dim, block_n)
     if grid_n == 1:
         if n_elements >= 8192:
-            return False, 8
+            return False, 6
         if n_elements >= 4096:
             return False, 6
         if n_elements >= 2048:
-            return False, 1
-        return False, 2
+            return True, 2
+        return True, 2
 
     if n_elements <= 1024:
         return True, 3
     if n_elements <= 2048:
         return False, 1
-    return False, 2
+    return True, 1
 
 
 @lru_cache(maxsize=256)
@@ -401,6 +400,7 @@ def embedding_backward(embeddings, indices, grad_output):
 
     n_elements = indices.numel()
     embedding_dim = embeddings.shape[1]
+    
     if n_elements == 0:
         return grad_weight
 
@@ -439,7 +439,6 @@ def embedding_backward(embeddings, indices, grad_output):
 
 class LigerEmbeddingFunction(torch.autograd.Function):
     @staticmethod
-    @ensure_contiguous
     def forward(ctx, embeddings: torch.Tensor, indices: torch.Tensor):
         output = embedding_forward(embeddings, indices)
         ctx.save_for_backward(indices, embeddings)
