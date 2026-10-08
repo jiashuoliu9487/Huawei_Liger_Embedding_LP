@@ -1,0 +1,900 @@
+{
+  "trace_source_sha256": "257c60d831c4338b991f3b6a3326559c3883786350147d4443793382cc7a5696",
+  "scope": "Cold-cache diagnostic before the native host extension; selected events only; microseconds",
+  "events": [
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857611729.290",
+      "dur": 4.63
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857611689.670",
+      "dur": 47.7
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857611649.000",
+      "dur": 130.52
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612021.220",
+      "dur": 10.11
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857611922.580",
+      "dur": 126.93
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857611876.460",
+      "dur": 209.77
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612265.780",
+      "dur": 4.46
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612241.720",
+      "dur": 31.16
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612216.970",
+      "dur": 84.08
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612478.640",
+      "dur": 7.14
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612407.810",
+      "dur": 90.85
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612374.250",
+      "dur": 161.38
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612701.440",
+      "dur": 6.28
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612673.560",
+      "dur": 36.57
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612647.510",
+      "dur": 91.28
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612899.610",
+      "dur": 6.71
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612833.980",
+      "dur": 84.25
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857612800.870",
+      "dur": 149.61
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613109.810",
+      "dur": 7.66
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613087.470",
+      "dur": 32.21
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613065.210",
+      "dur": 80.18
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613296.620",
+      "dur": 9.92
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613238.990",
+      "dur": 79.32
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613209.350",
+      "dur": 138.42
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613495.130",
+      "dur": 13.07
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613473.610",
+      "dur": 36.88
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613452.370",
+      "dur": 84.14
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613694.230",
+      "dur": 8.84
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613638.220",
+      "dur": 76.86
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613607.980",
+      "dur": 139.8
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613924.340",
+      "dur": 4.4
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613901.590",
+      "dur": 32.38
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857613878.310",
+      "dur": 82.71
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614122.900",
+      "dur": 9.31
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614065.350",
+      "dur": 79.71
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614027.210",
+      "dur": 149.61
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614335.100",
+      "dur": 6.46
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614313.280",
+      "dur": 30.56
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614290.490",
+      "dur": 79.64
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614532.880",
+      "dur": 9.79
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614478.930",
+      "dur": 74.81
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614449.080",
+      "dur": 134.67
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614733.500",
+      "dur": 14.83
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614712.290",
+      "dur": 38.88
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614690.390",
+      "dur": 88.98
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614929.390",
+      "dur": 10.21
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614873.020",
+      "dur": 78.68
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857614841.890",
+      "dur": 139.75
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615136.400",
+      "dur": 4.39
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615112.600",
+      "dur": 30.55
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615090.020",
+      "dur": 80.66
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615329.770",
+      "dur": 6.18
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615275.690",
+      "dur": 72.42
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615243.360",
+      "dur": 133.14
+    },
+    {
+      "name": "aclnnEmbedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615524.710",
+      "dur": 4.23
+    },
+    {
+      "name": "aten::embedding",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615503.440",
+      "dur": 27.55
+    },
+    {
+      "name": "TORCH_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615481.560",
+      "dur": 74.76
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615717.880",
+      "dur": 10.06
+    },
+    {
+      "name": "LigerEmbeddingFunction",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615662.000",
+      "dur": 77.85
+    },
+    {
+      "name": "LIGER_EMBEDDING",
+      "cat": "cpu_op",
+      "ph": "X",
+      "ts": "1791435857615633.150",
+      "dur": 136.03
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857611737.160",
+      "dur": 12.84
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857612032.770",
+      "dur": 9.57
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857612272.580",
+      "dur": 10.82
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857612487.540",
+      "dur": 8.38
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857612709.770",
+      "dur": 10.4
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857612908.530",
+      "dur": 7.67
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857613119.480",
+      "dur": 10.36
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857613308.380",
+      "dur": 8.23
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857613510.220",
+      "dur": 10.17
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857613705.300",
+      "dur": 9.06
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857613931.550",
+      "dur": 10.62
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857614135.190",
+      "dur": 7.93
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857614343.680",
+      "dur": 10.62
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857614545.490",
+      "dur": 8.18
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857614750.520",
+      "dur": 11.02
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857614941.580",
+      "dur": 7.13
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857615143.200",
+      "dur": 10.39
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857615338.120",
+      "dur": 7.08
+    },
+    {
+      "name": "Dequeue@aclnnEmbedding",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857615530.930",
+      "dur": 10.28
+    },
+    {
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "cat": "dequeue",
+      "ph": "X",
+      "ts": "1791435857615729.970",
+      "dur": 7.04
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857611729.690",
+      "dur": 3.98
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857612024.300",
+      "dur": 5.95
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857612266.200",
+      "dur": 3.79
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857612479.170",
+      "dur": 5.46
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857612701.820",
+      "dur": 5.59
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857612900.110",
+      "dur": 5.4
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857613113.320",
+      "dur": 3.9
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857613300.250",
+      "dur": 5.5
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857613495.470",
+      "dur": 12.42
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857613694.810",
+      "dur": 7.61
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857613924.690",
+      "dur": 3.78
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857614123.390",
+      "dur": 8.17
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857614335.430",
+      "dur": 5.82
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857614536.650",
+      "dur": 5.34
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857614744.430",
+      "dur": 3.57
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857614929.900",
+      "dur": 8.96
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857615136.920",
+      "dur": 3.6
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857615330.290",
+      "dur": 5.04
+    },
+    {
+      "name": "Enqueue@aclnnEmbedding",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857615525.070",
+      "dur": 3.56
+    },
+    {
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "cat": "enqueue",
+      "ph": "X",
+      "ts": "1791435857615718.480",
+      "dur": 8.79
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857611739.536",
+      "dur": 20.960875
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857612026.567",
+      "dur": 19.08075
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857612277.397",
+      "dur": 21.120875
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857612485.866",
+      "dur": 19.32075
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857612725.235",
+      "dur": 20.5408125
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857612907.222",
+      "dur": 19.12075
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857613133.251",
+      "dur": 20.9408125
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857613309.598",
+      "dur": 20.1008125
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857613528.047",
+      "dur": 21.680875
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857613705.974",
+      "dur": 19.6808125
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857613950.324",
+      "dur": 21.600875
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857614138.472",
+      "dur": 19.44075
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857614372.761",
+      "dur": 20.8608125
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857614543.328",
+      "dur": 19.32075
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857614762.357",
+      "dur": 20.7008125
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857614937.944",
+      "dur": 19.5208125
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857615168.593",
+      "dur": 20.6208125
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857615341.700",
+      "dur": 19.6608125
+    },
+    {
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "ph": "X",
+      "ts": "1791435857615555.548",
+      "dur": 20.8008125
+    },
+    {
+      "name": "embedding_forward_kernel_mouter",
+      "ph": "X",
+      "ts": "1791435857615722.135",
+      "dur": 19.42075
+    }
+  ],
+  "statistics": [
+    {
+      "category": "cpu_op",
+      "name": "aclnnEmbedding",
+      "count": 10,
+      "median_us": 5.455
+    },
+    {
+      "category": "cpu_op",
+      "name": "aten::embedding",
+      "count": 10,
+      "median_us": 32.295
+    },
+    {
+      "category": "cpu_op",
+      "name": "TORCH_EMBEDDING",
+      "count": 10,
+      "median_us": 83.395
+    },
+    {
+      "category": "cpu_op",
+      "name": "embedding_forward_kernel_mouter",
+      "count": 10,
+      "median_us": 9.55
+    },
+    {
+      "category": "cpu_op",
+      "name": "LigerEmbeddingFunction",
+      "count": 10,
+      "median_us": 79.0
+    },
+    {
+      "category": "cpu_op",
+      "name": "LIGER_EMBEDDING",
+      "count": 10,
+      "median_us": 139.775
+    },
+    {
+      "category": "dequeue",
+      "name": "Dequeue@aclnnEmbedding",
+      "count": 10,
+      "median_us": 10.51
+    },
+    {
+      "category": "dequeue",
+      "name": "Dequeue@embedding_forward_kernel_mouter",
+      "count": 10,
+      "median_us": 8.055
+    },
+    {
+      "category": "enqueue",
+      "name": "Enqueue@aclnnEmbedding",
+      "count": 10,
+      "median_us": 3.8449999999999998
+    },
+    {
+      "category": "enqueue",
+      "name": "Enqueue@embedding_forward_kernel_mouter",
+      "count": 10,
+      "median_us": 5.725
+    },
+    {
+      "category": "",
+      "name": "aclnnEmbedding_GatherV2AiCore_GatherV2",
+      "count": 10,
+      "median_us": 20.9008125
+    },
+    {
+      "category": "",
+      "name": "embedding_forward_kernel_mouter",
+      "count": 10,
+      "median_us": 19.430750000000003
+    }
+  ]
+}

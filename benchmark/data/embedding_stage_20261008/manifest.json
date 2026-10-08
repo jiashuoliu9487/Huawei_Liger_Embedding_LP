@@ -1,0 +1,20 @@
+{
+  "code_commit": "c67cc719e8102ff6f4d3a58bf652a8abc18d3d97",
+  "date": "2026-10-08",
+  "versions": {
+    "torch": "2.7.1",
+    "torch-npu": "2.7.1",
+    "triton-ascend": "3.2.1",
+    "liger-kernel": "0.8.2"
+  },
+  "CANN": "9.1.0",
+  "device_reported": "Ascend910_9382",
+  "default_pass": 9,
+  "affinity_run1_pass": 12,
+  "affinity_run2_pass": 11,
+  "total_per_run": 12,
+  "tests_passed": 110,
+  "tests_warning_count": 1,
+  "text_normalization": "LF line endings; trailing whitespace removed; all measurement values unchanged; scripts formatted with Ruff.",
+  "historical_source_original_sha256": "b0c04ba0410c86d3238e18af12acf6663bee1682f2139b556d5ba3645addc4bb"
+}

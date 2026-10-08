@@ -1,0 +1,166 @@
+/usr/local/python3.11.15/lib/python3.11/site-packages/pytest_asyncio/plugin.py:247: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-None0] PASSED [  0%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-None1] PASSED [  1%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-128-None] PASSED [  2%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-60-None0] PASSED [  3%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-60-None1] PASSED [  4%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-120-None] PASSED [  5%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-500-None] PASSED [  6%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-30522-768-None] PASSED [  7%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-0] PASSED [  8%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-1000-128-50] PASSED [  9%]
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-30522-768-1] PASSED [ 10%]
+test/transformers/test_embedding_ascend_dispatch.py::test_embedding_ascend_forward_dispatch[training-dtype0-64] PASSED [ 10%]
+test/transformers/test_embedding_ascend_dispatch.py::test_embedding_ascend_forward_dispatch[training-dtype1-4096] PASSED [ 11%]
+test/transformers/test_embedding_ascend_dispatch.py::test_embedding_ascend_forward_dispatch[no_grad-dtype0-64] PASSED [ 12%]
+test/transformers/test_embedding_ascend_dispatch.py::test_embedding_ascend_forward_dispatch[no_grad-dtype1-4096] PASSED [ 13%]
+test/transformers/test_embedding_ascend_dispatch.py::test_embedding_ascend_forward_dispatch[benchmark_forward-dtype0-64] PASSED [ 14%]
+test/transformers/test_embedding_ascend_dispatch.py::test_embedding_ascend_forward_dispatch[benchmark_forward-dtype1-4096] PASSED [ 15%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-vector-index_dtype0] PASSED [ 16%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-vector-index_dtype1] PASSED [ 17%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-matrix-index_dtype0] PASSED [ 18%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-matrix-index_dtype1] PASSED [ 19%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-transpose-index_dtype0] PASSED [ 20%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-transpose-index_dtype1] PASSED [ 20%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-slice_vector-index_dtype0] PASSED [ 21%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-slice_vector-index_dtype1] PASSED [ 22%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-slice_matrix-index_dtype0] PASSED [ 23%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-slice_matrix-index_dtype1] PASSED [ 24%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-permute_3d-index_dtype0] PASSED [ 25%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-permute_3d-index_dtype1] PASSED [ 26%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-scalar-index_dtype0] PASSED [ 27%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-scalar-index_dtype1] PASSED [ 28%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-empty-index_dtype0] PASSED [ 29%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[contiguous-empty-index_dtype1] PASSED [ 30%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-vector-index_dtype0] PASSED [ 30%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-vector-index_dtype1] PASSED [ 31%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-matrix-index_dtype0] PASSED [ 32%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-matrix-index_dtype1] PASSED [ 33%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-transpose-index_dtype0] PASSED [ 34%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-transpose-index_dtype1] PASSED [ 35%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-slice_vector-index_dtype0] PASSED [ 36%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-slice_vector-index_dtype1] PASSED [ 37%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-slice_matrix-index_dtype0] PASSED [ 38%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-slice_matrix-index_dtype1] PASSED [ 39%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-permute_3d-index_dtype0] PASSED [ 40%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-permute_3d-index_dtype1] PASSED [ 40%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-scalar-index_dtype0] PASSED [ 41%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-scalar-index_dtype1] PASSED [ 42%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-empty-index_dtype0] PASSED [ 43%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[transpose-empty-index_dtype1] PASSED [ 44%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-vector-index_dtype0] PASSED [ 45%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-vector-index_dtype1] PASSED [ 46%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-matrix-index_dtype0] PASSED [ 47%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-matrix-index_dtype1] PASSED [ 48%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-transpose-index_dtype0] PASSED [ 49%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-transpose-index_dtype1] PASSED [ 50%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-slice_vector-index_dtype0] PASSED [ 50%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-slice_vector-index_dtype1] PASSED [ 51%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-slice_matrix-index_dtype0] PASSED [ 52%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-slice_matrix-index_dtype1] PASSED [ 53%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-permute_3d-index_dtype0] PASSED [ 54%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-permute_3d-index_dtype1] PASSED [ 55%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-scalar-index_dtype0] PASSED [ 56%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-scalar-index_dtype1] PASSED [ 57%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-empty-index_dtype0] PASSED [ 58%]
+test/transformers/test_embedding_ascend_layout.py::test_embedding_ascend_layout[slice-empty-index_dtype1] PASSED [ 59%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[0-index_dtype0-dtype0] PASSED [ 60%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[0-index_dtype0-dtype1] PASSED [ 60%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[0-index_dtype0-dtype2] PASSED [ 61%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[0-index_dtype1-dtype0] PASSED [ 62%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[0-index_dtype1-dtype1] PASSED [ 63%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[0-index_dtype1-dtype2] PASSED [ 64%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[1-index_dtype0-dtype0] PASSED [ 65%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[1-index_dtype0-dtype1] PASSED [ 66%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[1-index_dtype0-dtype2] PASSED [ 67%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[1-index_dtype1-dtype0] PASSED [ 68%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[1-index_dtype1-dtype1] PASSED [ 69%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_uses_current_tensors_and_stream[1-index_dtype1-dtype2] PASSED [ 70%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_preserves_profiler_hooks PASSED [ 70%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_cached_launch_preserves_jit_pre_run_hooks PASSED [ 71%]
+test/transformers/test_embedding_ascend_launch_cache.py::test_launch_cache_is_bounded PASSED [ 72%]
+test/transformers/test_embedding_ascend_host.py::test_native_autograd_is_active PASSED [ 73%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[False-index_dtype0-dtype0] PASSED [ 74%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[False-index_dtype0-dtype1] PASSED [ 75%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[False-index_dtype0-dtype2] PASSED [ 76%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[False-index_dtype1-dtype0] PASSED [ 77%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[False-index_dtype1-dtype1] PASSED [ 78%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[False-index_dtype1-dtype2] PASSED [ 79%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[True-index_dtype0-dtype0] PASSED [ 80%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[True-index_dtype0-dtype1] PASSED [ 80%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[True-index_dtype0-dtype2] PASSED [ 81%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[True-index_dtype1-dtype0] PASSED [ 82%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[True-index_dtype1-dtype1] PASSED [ 83%]
+test/transformers/test_embedding_ascend_host.py::test_native_host_backward[True-index_dtype1-dtype2] PASSED [ 84%]
+test/transformers/test_embedding_ascend_host.py::test_native_backward_on_side_stream PASSED [ 85%]
+test/transformers/test_embedding_ascend_host.py::test_native_without_grad[no_grad] PASSED [ 86%]
+test/transformers/test_embedding_ascend_host.py::test_native_without_grad[inference_mode] PASSED [ 87%]
+test/transformers/test_embedding_ascend_host.py::test_function_subclass_preserves_override PASSED [ 88%]
+test/transformers/test_embedding_ascend_host.py::test_native_metadata_does_not_retain_inputs PASSED [ 89%]
+test/transformers/test_embedding_ascend_host.py::test_native_handles_other_device_context PASSED [ 90%]
+test/transformers/test_embedding_ascend_host.py::test_large_forward_uses_guarded_i32_kernel[index_dtype0-dtype0] PASSED [ 90%]
+test/transformers/test_embedding_ascend_host.py::test_large_forward_uses_guarded_i32_kernel[index_dtype0-dtype1] PASSED [ 91%]
+test/transformers/test_embedding_ascend_host.py::test_large_forward_uses_guarded_i32_kernel[index_dtype1-dtype0] PASSED [ 92%]
+test/transformers/test_embedding_ascend_host.py::test_large_forward_uses_guarded_i32_kernel[index_dtype1-dtype1] PASSED [ 93%]
+test/transformers/test_embedding_ascend_host.py::test_i32_byte_offset_boundaries[8192-4096-2-262144-True] PASSED [ 94%]
+test/transformers/test_embedding_ascend_host.py::test_i32_byte_offset_boundaries[8192-4096-2-262145-False] PASSED [ 95%]
+test/transformers/test_embedding_ascend_host.py::test_i32_byte_offset_boundaries[262145-4096-2-32-False] PASSED [ 96%]
+test/transformers/test_embedding_ascend_host.py::test_i32_byte_offset_boundaries[1024-4096-2-32-False] PASSED [ 97%]
+test/transformers/test_embedding_ascend_host.py::test_i32_byte_offset_boundaries[8192-4096-4-32-False] PASSED [ 98%]
+test/transformers/test_embedding_ascend_host.py::test_i32_byte_offset_boundaries[8192-2048-2-32-False] PASSED [ 99%]
+test/transformers/test_embedding_ascend_host.py::test_native_cache_distinguishes_vocabulary_size PASSED [100%]
+
+=============================== warnings summary ===============================
+test/transformers/test_embedding.py::test_embedding_correctness[dtype0-1e-06-1e-05-npu-100-64-None0]
+  /root/Huawei_Liger_Embedding_LP/test/transformers/test_embedding.py:56: UserWarning: Cannot create tensor with interal format while allow_internel_format=False, tensor will be created with base format. (Triggered internally at build/CMakeFiles/torch_npu.dir/compiler_depend.ts:335.)
+    grad_output = torch.randn_like(torch_output)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================== 110 passed, 1 warning in 62.84s (0:01:02) ===================
+FINAL_V2_TEST_EXIT=0
+{"bt": 1024, "round": 0, "order": ["torch", "liger"], "ratio": 0.9136276086192919}
+{"bt": 1024, "round": 1, "order": ["liger", "torch"], "ratio": 0.9141898330919083}
+{"bt": 1024, "round": 2, "order": ["torch", "liger"], "ratio": 0.9144230971579885}
+{"bt": 1024, "round": 3, "order": ["liger", "torch"], "ratio": 0.9084371933633756}
+{"bt": 1024, "round": 4, "order": ["torch", "liger"], "ratio": 0.9136517063824304}
+{"bt": 1024, "round": 5, "order": ["liger", "torch"], "ratio": 0.9098753858224842}
+{"bt": 1024, "round": 6, "order": ["torch", "liger"], "ratio": 0.9180327486058676}
+{"bt": 1024, "round": 7, "order": ["liger", "torch"], "ratio": 0.917466409376148}
+{"bt": 1024, "round": 8, "order": ["torch", "liger"], "ratio": 0.9138594328631185}
+{"bt": 1024, "round": 9, "order": ["liger", "torch"], "ratio": 0.9116234379267024}
+{"bt": 2048, "round": 0, "order": ["torch", "liger"], "ratio": 0.9425365883113391}
+{"bt": 2048, "round": 1, "order": ["liger", "torch"], "ratio": 0.9440880349972424}
+{"bt": 2048, "round": 2, "order": ["torch", "liger"], "ratio": 0.9445208471490898}
+{"bt": 2048, "round": 3, "order": ["liger", "torch"], "ratio": 0.9412436814214222}
+{"bt": 2048, "round": 4, "order": ["torch", "liger"], "ratio": 0.9403700778421403}
+{"bt": 2048, "round": 5, "order": ["liger", "torch"], "ratio": 0.943629715012724}
+{"bt": 2048, "round": 6, "order": ["torch", "liger"], "ratio": 0.9396847248630145}
+{"bt": 2048, "round": 7, "order": ["liger", "torch"], "ratio": 0.9396157872555875}
+{"bt": 2048, "round": 8, "order": ["torch", "liger"], "ratio": 0.9374286487587591}
+{"bt": 2048, "round": 9, "order": ["liger", "torch"], "ratio": 0.9418365066758149}
+{"bt": 4096, "round": 0, "order": ["torch", "liger"], "ratio": 0.9828578147542036}
+{"bt": 4096, "round": 1, "order": ["liger", "torch"], "ratio": 0.9834452499421276}
+{"bt": 4096, "round": 2, "order": ["torch", "liger"], "ratio": 0.9829797589433982}
+{"bt": 4096, "round": 3, "order": ["liger", "torch"], "ratio": 0.9856885232563849}
+{"bt": 4096, "round": 4, "order": ["torch", "liger"], "ratio": 0.9854480258604592}
+{"bt": 4096, "round": 5, "order": ["liger", "torch"], "ratio": 0.9844031233442068}
+{"bt": 4096, "round": 6, "order": ["torch", "liger"], "ratio": 0.9844049948205238}
+{"bt": 4096, "round": 7, "order": ["liger", "torch"], "ratio": 0.9814371679583981}
+{"bt": 4096, "round": 8, "order": ["torch", "liger"], "ratio": 0.9820402378637137}
+{"bt": 4096, "round": 9, "order": ["liger", "torch"], "ratio": 0.9836832729994219}
+{"bt": 8192, "round": 0, "order": ["torch", "liger"], "ratio": 0.9975286867599421}
+{"bt": 8192, "round": 1, "order": ["liger", "torch"], "ratio": 0.9971579989801368}
+{"bt": 8192, "round": 2, "order": ["torch", "liger"], "ratio": 0.9981451859017545}
+{"bt": 8192, "round": 3, "order": ["liger", "torch"], "ratio": 0.9974048648000899}
+{"bt": 8192, "round": 4, "order": ["torch", "liger"], "ratio": 0.9988247373839692}
+{"bt": 8192, "round": 5, "order": ["liger", "torch"], "ratio": 0.996051104905895}
+{"bt": 8192, "round": 6, "order": ["torch", "liger"], "ratio": 0.9969129564107237}
+{"bt": 8192, "round": 7, "order": ["liger", "torch"], "ratio": 0.9972201620772815}
+{"bt": 8192, "round": 8, "order": ["torch", "liger"], "ratio": 0.996790331619591}
+{"bt": 8192, "round": 9, "order": ["liger", "torch"], "ratio": 1.0}
+DIAGNOSTIC_COMPLETE
+FINAL_V2_CONTROLLED_EXIT=0

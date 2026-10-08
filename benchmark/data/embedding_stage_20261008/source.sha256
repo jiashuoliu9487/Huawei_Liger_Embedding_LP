@@ -1,0 +1,3 @@
+14e8ef79aea9483e95f480ec71e7977ae9390d8294e5415023cbca41a2c0e62b  src/liger_kernel/ops/backends/_ascend/ops/embedding.py
+f7a5ca787fd945e53d435532f1bfb97bb232a38da8490b8634ec1eea270fda40  src/liger_kernel/ops/backends/_ascend/ops/_embedding_host.cpp
+e57d429d1e4299f26fce08ea598f780f8c4b4ee21f982ebef1917a13005e8771  src/liger_kernel/ops/backends/_ascend/ops/_embedding_host.py
