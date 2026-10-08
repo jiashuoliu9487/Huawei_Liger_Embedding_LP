@@ -19,10 +19,7 @@ class LigerEmbedding(nn.Module):
                 self.weight[padding_idx].fill_(0)
 
     def forward(self, indices):
-        if self.weight.device.type == "npu" and (not torch.is_grad_enabled() or getattr(self, "_benchmark_kernel_operation_mode", None) == "forward"): 
-            embedded = torch.nn.functional.embedding(indices, self.weight)
-        else:
-            embedded = LigerEmbeddingFunction.apply(self.weight, indices)
+        embedded = LigerEmbeddingFunction.apply(self.weight, indices)
         if self.padding_idx is not None:
             embedded = embedded.clone()
             embedded[indices == self.padding_idx] = 0

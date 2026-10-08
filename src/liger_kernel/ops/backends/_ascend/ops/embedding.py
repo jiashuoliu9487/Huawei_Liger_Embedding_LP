@@ -1,9 +1,16 @@
+import os
+
 from functools import lru_cache
 
 import torch
+import torch_npu
 import triton
 import triton.language as tl
 
+from triton.backends.ascend import utils as ascend_runtime_utils
+from triton.compiler.compiler import CompiledKernel
+
+from liger_kernel.ops.backends._ascend.ops._embedding_host import load_host_extension
 from liger_kernel.ops.backends._ascend.ub_manager import compute_default_tiling_strategy
 from liger_kernel.ops.utils import ensure_contiguous
 from liger_kernel.ops.utils import get_npu_core_count
@@ -98,6 +105,49 @@ def embedding_forward_kernel_mouter(
         offsets_m = tl.max_contiguous(offsets_m, BLOCK_SIZE_M)
         mask_m = offsets_m < n_elements
         indices = tl.load(indices_ptr + offsets_m, mask=mask_m, other=0)
+
+        for block_n in tl.range(0, grid_n):
+            start_n = block_n * BLOCK_SIZE_N
+
+            offsets_n = start_n + tl.arange(0, BLOCK_SIZE_N)
+            offsets_n = tl.max_contiguous(offsets_n, BLOCK_SIZE_N)
+            mask_n = offsets_n < embedding_dim
+            block_mask = mask_m[:, None] & mask_n[None, :]
+
+            embedding_offsets = indices[:, None] * embedding_dim + offsets_n[None, :]
+            embeddings = tl.load(
+                embeddings_ptr + embedding_offsets,
+                mask=block_mask,
+                other=0.0,
+            )
+
+            output_offsets = offsets_m[:, None] * embedding_dim + offsets_n[None, :]
+            tl.store(output_ptr + output_offsets, embeddings, mask=block_mask)
+
+
+@triton.jit
+def embedding_forward_kernel_mouter_i32(
+    embeddings_ptr,
+    indices_ptr,
+    output_ptr,
+    n_elements,
+    embedding_dim: tl.constexpr,
+    BLOCK_SIZE_M: tl.constexpr,
+    BLOCK_SIZE_N: tl.constexpr,
+):
+    pid = tl.program_id(0)
+    num_progs = tl.num_programs(0)
+
+    grid_m = tl.cdiv(n_elements, BLOCK_SIZE_M)
+    grid_n = tl.cdiv(embedding_dim, BLOCK_SIZE_N)
+
+    for block_m in tl.range(pid, grid_m, num_progs):
+        start_m = block_m * BLOCK_SIZE_M
+
+        offsets_m = start_m + tl.arange(0, BLOCK_SIZE_M)
+        offsets_m = tl.max_contiguous(offsets_m, BLOCK_SIZE_M)
+        mask_m = offsets_m < n_elements
+        indices = tl.load(indices_ptr + offsets_m, mask=mask_m, other=0).to(tl.int32)
 
         for block_n in tl.range(0, grid_n):
             start_n = block_n * BLOCK_SIZE_N
@@ -344,6 +394,8 @@ def _select_backward_tile_sizes(
 def _get_forward_launch_config(n_elements: int, embedding_dim: int, dtype_size: int):
     block_m, block_n = _select_forward_tile_sizes(n_elements, embedding_dim, dtype_size)
     use_mouter, core_mult = _pick_forward_schedule(n_elements, embedding_dim, block_n)
+    if embedding_dim == 4096 and dtype_size == 2 and n_elements >= 8192:
+        block_m, block_n, use_mouter, core_mult = 6, 4096, True, 2
     return block_m, block_n, use_mouter, core_mult
 
 
@@ -351,56 +403,211 @@ def _launch_grid(num_cores: int, total_blocks: int, core_multiplier: int = 1) ->
     return max(1, min(num_cores * core_multiplier, total_blocks))
 
 
-def embedding_forward(embeddings, indices):
-    ori_shape = indices.shape
-    indices = indices.view(-1)
+# Cache compilation/launch metadata only, never tensors or data pointers.
+_FORWARD_LAUNCHERS = {}
+_FORWARD_LAUNCH_CACHE_SIZE = 256
 
+
+def _use_i32_forward_offsets(n_elements, embedding_dim, dtype_size, num_embeddings):
+    # Bound both input and output byte offsets, not only the index values.
+    return (
+        embedding_dim == 4096
+        and dtype_size == 2
+        and n_elements >= 8192
+        and max(n_elements, num_embeddings) * embedding_dim * dtype_size <= (1 << 31)
+    )
+
+
+def _embedding_forward_python(embeddings, indices):
+    ori_shape = indices.shape
+    # Kernels address indices and embedding rows using contiguous offsets.
+    indices = indices.contiguous()
+    embeddings = embeddings.contiguous()
     n_elements = indices.numel()
     embedding_dim = embeddings.shape[1]
+    device = embeddings.device
+    dtype = embeddings.dtype
+    if device.type != "npu" or indices.device != device:
+        raise ValueError("Ascend embedding requires weight and indices on the same NPU")
+    if torch.npu.current_device() != device.index:
+        with torch.npu.device(device):
+            return _embedding_forward_python(embeddings, indices)
+    output = torch.empty((*ori_shape, embedding_dim), device=device, dtype=dtype)
     if n_elements == 0:
-        return torch.empty(*ori_shape, embedding_dim, device=indices.device, dtype=embeddings.dtype)
+        return output
 
-    output = torch.empty(
+    weight_ptr = embeddings.data_ptr()
+    indices_ptr = indices.data_ptr()
+    # Triton specializes pointer alignment as well as scalar values and dtypes.
+    key = (
+        device.index,
+        dtype,
+        indices.dtype,
         n_elements,
         embedding_dim,
-        device=indices.device,
-        dtype=embeddings.dtype,
+        embeddings.shape[0],
+        weight_ptr % 16,
+        indices_ptr % 16,
+        os.environ.get("TRITON_DEBUG", "0"),
     )
-
-    block_m, block_n, use_mouter, core_mult = _get_forward_launch_config(
-        n_elements, embedding_dim, embeddings.element_size()
-    )
-    num_cores = get_npu_core_count()
-
-    if use_mouter:
+    plan = _FORWARD_LAUNCHERS.get(key)
+    if plan is None:
+        block_m, block_n, use_mouter, core_mult = _get_forward_launch_config(
+            n_elements, embedding_dim, embeddings.element_size()
+        )
+        use_i32 = _use_i32_forward_offsets(n_elements, embedding_dim, embeddings.element_size(), embeddings.shape[0])
+        if use_i32:
+            block_m, block_n, use_mouter, core_mult = 8, 4096, True, 4
         total_blocks = triton.cdiv(n_elements, block_m)
-        kernel = embedding_forward_kernel_mouter
-    else:
-        total_blocks = triton.cdiv(n_elements, block_m) * triton.cdiv(embedding_dim, block_n)
-        kernel = embedding_forward_kernel
+        if not use_mouter:
+            total_blocks *= triton.cdiv(embedding_dim, block_n)
+        grid = _launch_grid(get_npu_core_count(), total_blocks, core_mult)
+        kernel = embedding_forward_kernel_mouter if use_mouter else embedding_forward_kernel
+        if use_i32:
+            kernel = embedding_forward_kernel_mouter_i32
+        options = dict(embedding_dim=embedding_dim, BLOCK_SIZE_M=block_m, BLOCK_SIZE_N=block_n)
+        compiled = kernel[(grid,)](embeddings, indices, output, n_elements, **options)
+        if compiled is not None and hasattr(compiled, "run"):
+            runtime_launcher = compiled.run
+            raw_launch = getattr(runtime_launcher, "launch", None)
+            raw_stream = getattr(torch_npu._C, "_npu_getCurrentRawStream", None)
+            plan = (
+                kernel,
+                options,
+                compiled,
+                compiled[(grid, 1, 1)],
+                runtime_launcher,
+                raw_launch,
+                raw_stream,
+                compiled.function,
+                compiled.packed_metadata,
+                grid,
+            )
+            if len(_FORWARD_LAUNCHERS) >= _FORWARD_LAUNCH_CACHE_SIZE:
+                _FORWARD_LAUNCHERS.pop(next(iter(_FORWARD_LAUNCHERS)))
+            _FORWARD_LAUNCHERS[key] = plan
+        return output
 
-    kernel[_launch_grid(num_cores, total_blocks, core_mult),](
-        embeddings,
-        indices,
-        output,
-        n_elements,
-        embedding_dim=embedding_dim,
-        BLOCK_SIZE_M=block_m,
-        BLOCK_SIZE_N=block_n,
+    kernel, options, compiled, runner, runtime_launcher, raw_launch, raw_stream, function, metadata, grid = plan
+    if kernel.pre_run_hooks:
+        kernel[(grid,)](embeddings, indices, output, n_elements, **options)
+    elif (
+        raw_launch is not None
+        and raw_stream is not None
+        and CompiledKernel.launch_enter_hook is None
+        and CompiledKernel.launch_exit_hook is None
+        and not runtime_launcher.compile_only
+        and not runtime_launcher.enable_msprof_register_tensor
+    ):
+        # These addresses come from live, same-device NPU tensors. The supported
+        # uint64 launcher arguments avoid repeating aclrtPointerGetAttributes.
+        # Fetch the current stream for every call; do not cache a stream handle.
+        profiler_registered = raw_launch(
+            grid,
+            1,
+            1,
+            raw_stream(device.index),
+            function,
+            metadata,
+            None,
+            None,
+            None,
+            weight_ptr,
+            indices_ptr,
+            output.data_ptr(),
+            n_elements,
+        )
+        ascend_runtime_utils.TRITON_PROFILER_REGISTERED = profiler_registered == 1
+    else:
+        # Preserve runtime diagnostics, profiler tensor metadata and launch hooks.
+        runner(embeddings, indices, output, n_elements)
+    return output
+
+
+_HOST_EXTENSION = None
+_STANDARD_TENSOR_TYPES = (torch.Tensor, torch.nn.Parameter)
+
+
+def _host_context_supported(embeddings, indices):
+    return (
+        type(embeddings) in _STANDARD_TENSOR_TYPES
+        and type(indices) is torch.Tensor
+        and not torch._C._are_functorch_transforms_active()
+        and not torch._C._get_tracing_state()
+        and not torch.compiler.is_compiling()
     )
 
-    return output.view(*ori_shape, -1)
+
+def _prepare_host_plan(embeddings, indices):
+    output = _embedding_forward_python(embeddings, indices)
+    key = (
+        embeddings.device.index,
+        embeddings.dtype,
+        indices.dtype,
+        indices.numel(),
+        embeddings.shape[1],
+        embeddings.shape[0],
+        embeddings.data_ptr() % 16,
+        indices.data_ptr() % 16,
+        os.environ.get("TRITON_DEBUG", "0"),
+    )
+    return output, _FORWARD_LAUNCHERS.get(key)
+
+
+def _host_backward(embeddings, indices, grad_output):
+    if torch.npu.current_device() != embeddings.device.index:
+        with torch.npu.device(embeddings.device):
+            return embedding_backward(embeddings, indices, grad_output)
+    return embedding_backward(embeddings, indices, grad_output)
+
+
+def _initialize_embedding_host():
+    global _HOST_EXTENSION
+    if _HOST_EXTENSION is None:
+        # Other threads can use the Python path while the extension is built.
+        _HOST_EXTENSION = False
+        extension = load_host_extension()
+        if extension is not None:
+            extension.configure(
+                _prepare_host_plan,
+                _host_backward,
+                CompiledKernel,
+                getattr(torch_npu._C, "_npu_getDevice", torch.npu.current_device),
+                lambda: _FORWARD_LAUNCH_CACHE_SIZE,
+                ascend_runtime_utils,
+            )
+            _HOST_EXTENSION = extension
+    return _HOST_EXTENSION
+
+
+def _clear_forward_launch_cache():
+    _FORWARD_LAUNCHERS.clear()
+    if _HOST_EXTENSION:
+        _HOST_EXTENSION.clear_cache()
+
+
+def embedding_forward(embeddings, indices, *, _autograd=False):
+    if _autograd:
+        # The Function entry checked support and initialized the host dispatcher.
+        return _HOST_EXTENSION.apply(embeddings, indices)
+    if _host_context_supported(embeddings, indices):
+        host = _HOST_EXTENSION
+        if host is None:
+            host = _initialize_embedding_host()
+        if host:
+            return host.forward(embeddings, indices)
+    return _embedding_forward_python(embeddings, indices)
 
 
 def embedding_backward(embeddings, indices, grad_output):
     indices = indices.contiguous().view(-1)
     grad_output = grad_output.contiguous().view(-1, embeddings.shape[1])
 
-    grad_weight = torch.zeros_like(embeddings)
+    grad_weight = torch.zeros_like(embeddings, memory_format=torch.contiguous_format)
 
     n_elements = indices.numel()
     embedding_dim = embeddings.shape[1]
-    
+
     if n_elements == 0:
         return grad_weight
 
@@ -438,6 +645,22 @@ def embedding_backward(embeddings, indices, grad_output):
 
 
 class LigerEmbeddingFunction(torch.autograd.Function):
+    @classmethod
+    def apply(cls, embeddings, indices):
+        if (
+            cls is LigerEmbeddingFunction
+            and cls.setup_context is torch.autograd.Function.setup_context
+            and cls.forward is _PYTHON_EMBEDDING_FORWARD
+            and cls.backward is _PYTHON_EMBEDDING_BACKWARD
+            and _host_context_supported(embeddings, indices)
+        ):
+            host = _HOST_EXTENSION
+            if host is None:
+                host = _initialize_embedding_host()
+            if host:
+                return embedding_forward(embeddings, indices, _autograd=True)
+        return super().apply(embeddings, indices)
+
     @staticmethod
     def forward(ctx, embeddings: torch.Tensor, indices: torch.Tensor):
         output = embedding_forward(embeddings, indices)
@@ -450,3 +673,7 @@ class LigerEmbeddingFunction(torch.autograd.Function):
         indices, embeddings = ctx.saved_tensors
         grad_weight = embedding_backward(embeddings, indices, grad_output)
         return grad_weight, None
+
+
+_PYTHON_EMBEDDING_FORWARD = LigerEmbeddingFunction.forward
+_PYTHON_EMBEDDING_BACKWARD = LigerEmbeddingFunction.backward

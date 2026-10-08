@@ -26,7 +26,7 @@ def get_default_dependencies():
             "torch>=2.6.0",
         ]
     elif platform == "npu":
-        return ["torch==2.7.1", "torch_npu==2.7.1", "triton-ascend==3.2.1"]
+        return ["torch==2.7.1", "torch_npu==2.7.1", "triton-ascend==3.2.1", "ninja>=1.10"]
 
 
 def get_optional_dependencies():
@@ -134,6 +134,7 @@ setup(
     name="liger_kernel",
     package_dir={"": "src"},
     packages=find_packages(where="src"),
+    package_data={"liger_kernel.ops.backends._ascend.ops": ["_embedding_host.cpp"]},
     install_requires=get_default_dependencies(),
     extras_require=get_optional_dependencies(),
     classifiers=[
